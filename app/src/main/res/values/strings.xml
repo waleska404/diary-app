@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MoodTracker</string>
+    <string name="auth_subtitle">Please sign in to continue.</string>
+    <string name="auth_title">Welcome!</string>
 </resources>
