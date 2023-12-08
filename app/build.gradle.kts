@@ -111,10 +111,10 @@ dependencies {
     implementation("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
 
     // Message Bar Compose
-    //implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
+    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
 
     // One-Tap Compose
-    //implementation("com.github.stevdza-san:OneTapCompose:1.0.7")
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.7")
 
     // Desugar JDK
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
