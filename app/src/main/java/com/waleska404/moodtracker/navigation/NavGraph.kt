@@ -7,6 +7,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.stevdzasan.messagebar.rememberMessageBarState
+import com.stevdzasan.onetap.rememberOneTapSignInState
 import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationScreen
 import com.waleska404.moodtracker.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 
@@ -27,9 +29,15 @@ fun SetupNavGraph(
 
 fun NavGraphBuilder.authenticationRoute() {
     composable(route = Screen.Authentication.route) {
+        val oneTapState = rememberOneTapSignInState()
+        val messageBarState = rememberMessageBarState()
         AuthenticationScreen(
-            loadingState = false,
-            onButtonClicked = {}
+            loadingState = oneTapState.opened,
+            oneTapState = oneTapState,
+            messageBarState = messageBarState,
+            onButtonClicked = {
+                oneTapState.open()
+            }
         )
     }
 }
