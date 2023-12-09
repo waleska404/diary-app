@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.waleska404.moodtracker.util.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
-import io.realm.kotlin.mongodb.GoogleAuthType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,12 +29,9 @@ class AuthenticationViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) {
-                    /*
                     App.create(APP_ID).login(
+                        //Credentials.google(tokenId, GoogleAuthType.ID_TOKEN)
                         Credentials.jwt(tokenId)
-                    ).loggedIn*/
-                    App.create(APP_ID).login(
-                        Credentials.google(tokenId, GoogleAuthType.ID_TOKEN)
                     ).loggedIn
                 }
                 withContext(Dispatchers.Main) {
