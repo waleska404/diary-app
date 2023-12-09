@@ -1,16 +1,16 @@
 package com.waleska404.moodtracker.navigation
 
+import android.os.Build
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.annotation.RequiresApi
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,15 +20,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
+import com.waleska404.moodtracker.presentation.components.DisplayAlertDialog
 import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationScreen
 import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationViewModel
-import com.waleska404.moodtracker.util.Constants
+import com.waleska404.moodtracker.presentation.screens.home.HomeScreen
+import com.waleska404.moodtracker.util.Constants.APP_ID
 import com.waleska404.moodtracker.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavGraph(
     startDestination: String,
@@ -39,18 +43,26 @@ fun SetupNavGraph(
         navController = navController
     ) {
         authenticationRoute(
-            navigateToHome = {
+            navigateToHomeScreen = {
                 navController.popBackStack()
                 navController.navigate(Screen.Home.route)
             }
         )
-        homeRoute()
+        homeRoute(
+            navigateToWriteScreen = {
+                navController.navigate(Screen.Write.route)
+            },
+            navigateToAuthScreen = {
+                navController.popBackStack()
+                navController.navigate(Screen.Authentication.route)
+            }
+        )
         writeRoute()
     }
 }
 
 fun NavGraphBuilder.authenticationRoute(
-    navigateToHome: () -> Unit,
+    navigateToHomeScreen: () -> Unit,
 ) {
     composable(route = Screen.Authentication.route) {
         val viewModel: AuthenticationViewModel = viewModel()
@@ -86,28 +98,45 @@ fun NavGraphBuilder.authenticationRoute(
                 messageBarState.addError(Exception(message))
                 viewModel.setLoading(false)
             },
-            navigateToHomeScreen = navigateToHome
+            navigateToHomeScreen = navigateToHomeScreen
         )
     }
 }
 
-fun NavGraphBuilder.homeRoute() {
+@RequiresApi(Build.VERSION_CODES.O)
+fun NavGraphBuilder.homeRoute(
+    navigateToWriteScreen: () -> Unit,
+    navigateToAuthScreen: () -> Unit,
+) {
     composable(route = Screen.Home.route) {
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        var signOutDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(
-                onClick = {
-                    scope.launch(Dispatchers.IO) {
-                        App.create(Constants.APP_ID).currentUser?.logOut()
+        HomeScreen(
+            drawerState = drawerState,
+            onMenuClicked = {
+                scope.launch { drawerState.open() }
+            },
+            onSignOutClicked = {signOutDialogOpened = true},
+            navigateToWrite = navigateToWriteScreen,
+        )
+        DisplayAlertDialog(
+            title = "Sign Out",
+            message = "Are you sure yo want to log out from your Google account?",
+            dialogOpened = signOutDialogOpened,
+            onDialogClosed = { signOutDialogOpened = false },
+            onYesClicked = {
+                scope.launch(Dispatchers.IO) {
+                    val user = App.create(APP_ID).currentUser
+                    if(user != null) {
+                        user.logOut()
+                        withContext(Dispatchers.Main) {
+                            navigateToAuthScreen()
+                        }
                     }
-                }) {
-                Text(text = "LOGOUT")
+                }
             }
-        }
+        )
     }
 }
 

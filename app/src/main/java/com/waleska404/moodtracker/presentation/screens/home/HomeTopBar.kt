@@ -20,7 +20,7 @@ import java.time.ZonedDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(
-    scrollBehavior: TopAppBarScrollBehavior,
+    //scrollBehavior: TopAppBarScrollBehavior,
     onMenuClicked: () -> Unit,
     dateIsSelected: Boolean,
     onDateSelected: (ZonedDateTime) -> Unit,
@@ -28,7 +28,7 @@ fun HomeTopBar(
 ) {
     val dateDialog = rememberSheetState()
     TopAppBar(
-        scrollBehavior = scrollBehavior,
+        //scrollBehavior = scrollBehavior,
         navigationIcon = {
             IconButton(onClick = onMenuClicked) {
                 Icon(
