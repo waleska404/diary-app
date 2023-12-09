@@ -39,7 +39,6 @@ fun HomeContent(
                 stickyHeader(key = localDate) {
                     DateHeader(localDate = localDate)
                 }
-
                 items(
                     items = diaries,
                     key = { it._id.toString() }

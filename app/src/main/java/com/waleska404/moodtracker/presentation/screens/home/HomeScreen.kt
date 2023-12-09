@@ -2,6 +2,7 @@ package com.waleska404.moodtracker.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -11,15 +12,19 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.waleska404.moodtracker.R
+import com.waleska404.moodtracker.data.repository.Diaries
+import com.waleska404.moodtracker.model.RequestState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
+    diaries: Diaries,
     drawerState: DrawerState,
     onMenuClicked: () -> Unit,
     navigateToWrite: () -> Unit,
@@ -46,6 +51,37 @@ fun HomeScreen(
                 }
             },
             content = {
+                when (diaries) {
+                    is RequestState.Success -> {
+                        Log.d("MYTAG", "HomeScreen: ${diaries.data}")
+                        HomeContent(
+                            paddingValues = it,
+                            diaryNotes = diaries.data,
+                            onClick = {}
+                        )
+                    }
+
+                    is RequestState.Error -> {
+                        Log.d("MYTAG", "HomeScreen: ${diaries.error.message}")
+                        EmptyPage(
+                            title = "Error",
+                            subtitle = "${diaries.error.message}"
+                        )
+                    }
+
+                    is RequestState.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+
+                    else -> {
+
+                    }
+                }
 
             }
         )

@@ -24,6 +24,7 @@ import com.waleska404.moodtracker.presentation.components.DisplayAlertDialog
 import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationScreen
 import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationViewModel
 import com.waleska404.moodtracker.presentation.screens.home.HomeScreen
+import com.waleska404.moodtracker.presentation.screens.home.HomeViewModel
 import com.waleska404.moodtracker.util.Constants.APP_ID
 import com.waleska404.moodtracker.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import io.realm.kotlin.mongodb.App
@@ -109,10 +110,13 @@ fun NavGraphBuilder.homeRoute(
     navigateToAuthScreen: () -> Unit,
 ) {
     composable(route = Screen.Home.route) {
+        val viewModel: HomeViewModel = viewModel()
+        val diaries by viewModel.diaries
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var signOutDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
         HomeScreen(
+            diaries = diaries,
             drawerState = drawerState,
             onMenuClicked = {
                 scope.launch { drawerState.open() }
