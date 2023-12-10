@@ -2,6 +2,7 @@ package com.waleska404.moodtracker.navigation
 
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
@@ -142,20 +143,20 @@ fun NavGraphBuilder.homeRoute(
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var signOutDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
-        
+
         LaunchedEffect(key1 = diaries) {
-            if(diaries !is RequestState.Loading) {
+            if (diaries !is RequestState.Loading) {
                 onDataLoaded()
             }
         }
-        
+
         HomeScreen(
             diaries = diaries,
             drawerState = drawerState,
             onMenuClicked = {
                 scope.launch { drawerState.open() }
             },
-            onSignOutClicked = {signOutDialogOpened = true},
+            onSignOutClicked = { signOutDialogOpened = true },
             navigateToWrite = navigateToWriteScreen,
             navigateToWriteScreenWithArgs = navigateToWriteScreenWithArgs
         )
@@ -167,7 +168,7 @@ fun NavGraphBuilder.homeRoute(
             onYesClicked = {
                 scope.launch(Dispatchers.IO) {
                     val user = App.create(APP_ID).currentUser
-                    if(user != null) {
+                    if (user != null) {
                         user.logOut()
                         withContext(Dispatchers.Main) {
                             navigateToAuthScreen()
@@ -202,12 +203,24 @@ fun NavGraphBuilder.writeRoute(navigateBack: () -> Unit) {
             pagerState = pagerState,
             galleryState = galleryState,
             moodName = { Mood.values()[pageNumber].name },
-            onTitleChanged = { viewModel.setTitle(title = it)},
+            onTitleChanged = { viewModel.setTitle(title = it) },
             onDescriptionChanged = { viewModel.setDescription(description = it) },
             onDeleteConfirmed = { /*TODO*/ },
             onDateTimeUpdated = { viewModel.updateDateTime(zonedDateTime = it) },
             onBackPressed = navigateBack,
-            onSaveClicked = {},
+            onSaveClicked = {
+                viewModel.upsertDiary(
+                    diary = it.apply { mood = Mood.values()[pageNumber].name },
+                    onSuccess = navigateBack,
+                    onError = { message ->
+                        Toast.makeText(
+                            context,
+                            message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
+            },
             onImageSelect = {},
             onImageDeleteClicked = {}
         )

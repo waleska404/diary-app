@@ -1,6 +1,5 @@
 package com.waleska404.moodtracker.presentation.screens.write
 
-import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
@@ -103,6 +102,7 @@ class WriteViewModel @Inject constructor(
         uiState = uiState.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun upsertDiary(
         diary: Diary,
         onSuccess: () -> Unit,
@@ -117,6 +117,7 @@ class WriteViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun insertDiary(
         diary: Diary,
         onSuccess: () -> Unit,
@@ -139,6 +140,7 @@ class WriteViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun updateDiary(
         diary: Diary,
         onSuccess: () -> Unit,

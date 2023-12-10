@@ -65,7 +65,7 @@ fun WriteScreen(
         },
         content = { paddingValues ->
             WriteContent(
-                //uiState = uiState,
+                uiState = uiState,
                 pagerState = pagerState,
                 galleryState = galleryState,
                 title = uiState.title,

@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WriteContent(
-    //uiState: UiState,
+    uiState: UiState,
     pagerState: PagerState,
     galleryState: GalleryState,
     title: String,
@@ -156,7 +156,6 @@ fun WriteContent(
                     .fillMaxWidth()
                     .height(54.dp),
                 onClick = {
-                    /*
                     if (uiState.title.isNotEmpty() && uiState.description.isNotEmpty()) {
                         onSaveClicked(
                             Diary().apply {
@@ -172,7 +171,6 @@ fun WriteContent(
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    */
                 },
                 shape = Shapes().small
             ) {
