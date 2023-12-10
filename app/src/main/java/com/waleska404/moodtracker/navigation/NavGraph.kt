@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
+import com.waleska404.moodtracker.model.RequestState
 import com.waleska404.moodtracker.presentation.components.DisplayAlertDialog
 import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationScreen
 import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationViewModel
@@ -38,6 +40,7 @@ import java.lang.Exception
 fun SetupNavGraph(
     startDestination: String,
     navController: NavHostController,
+    onDataLoaded: () -> Unit,
 ) {
     NavHost(
         startDestination = startDestination,
@@ -47,7 +50,8 @@ fun SetupNavGraph(
             navigateToHomeScreen = {
                 navController.popBackStack()
                 navController.navigate(Screen.Home.route)
-            }
+            },
+            onDataLoaded = onDataLoaded
         )
         homeRoute(
             navigateToWriteScreen = {
@@ -56,7 +60,8 @@ fun SetupNavGraph(
             navigateToAuthScreen = {
                 navController.popBackStack()
                 navController.navigate(Screen.Authentication.route)
-            }
+            },
+            onDataLoaded = onDataLoaded
         )
         writeRoute()
     }
@@ -64,6 +69,7 @@ fun SetupNavGraph(
 
 fun NavGraphBuilder.authenticationRoute(
     navigateToHomeScreen: () -> Unit,
+    onDataLoaded: () -> Unit,
 ) {
     composable(route = Screen.Authentication.route) {
         val viewModel: AuthenticationViewModel = viewModel()
@@ -71,6 +77,11 @@ fun NavGraphBuilder.authenticationRoute(
         val authenticated by viewModel.authenticated
         val oneTapState = rememberOneTapSignInState()
         val messageBarState = rememberMessageBarState()
+
+        LaunchedEffect(key1 = Unit) {
+            onDataLoaded()
+        }
+
         AuthenticationScreen(
             authenticated = authenticated,
             loadingState = loadingState,
@@ -108,6 +119,7 @@ fun NavGraphBuilder.authenticationRoute(
 fun NavGraphBuilder.homeRoute(
     navigateToWriteScreen: () -> Unit,
     navigateToAuthScreen: () -> Unit,
+    onDataLoaded: () -> Unit,
 ) {
     composable(route = Screen.Home.route) {
         val viewModel: HomeViewModel = viewModel()
@@ -115,6 +127,13 @@ fun NavGraphBuilder.homeRoute(
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var signOutDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
+        
+        LaunchedEffect(key1 = diaries) {
+            if(diaries !is RequestState.Loading) {
+                onDataLoaded()
+            }
+        }
+        
         HomeScreen(
             diaries = diaries,
             drawerState = drawerState,

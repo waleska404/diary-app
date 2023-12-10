@@ -14,12 +14,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.waleska404.moodtracker.R
 import com.waleska404.moodtracker.data.repository.Diaries
 import com.waleska404.moodtracker.model.RequestState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -30,27 +33,34 @@ fun HomeScreen(
     navigateToWrite: () -> Unit,
     onSignOutClicked: () -> Unit,
 ) {
+    var padding by remember { mutableStateOf(PaddingValues()) }
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     NavigationDrawer(
         drawerState = drawerState,
         onSignOutClicked = onSignOutClicked,
         onDeleteAllClicked = { /*TODO*/ }
     ) {
         Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 HomeTopBar(
                     onMenuClicked = onMenuClicked,
                     dateIsSelected = false,
-                    onDateSelected = {}
-                ) {
-
-                }
+                    onDateSelected = {},
+                    onDateReset = {},
+                    scrollBehavior = scrollBehavior,
+                )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = navigateToWrite) {
+                FloatingActionButton(
+                    modifier = Modifier.padding(end = padding.calculateEndPadding(LayoutDirection.Ltr)),
+                    onClick = navigateToWrite
+                ) {
                     Icon(imageVector = Icons.Default.Edit, contentDescription = "New Diary Icon")
                 }
             },
             content = {
+                padding = it
                 when (diaries) {
                     is RequestState.Success -> {
                         Log.d("MYTAG", "HomeScreen: ${diaries.data}")
