@@ -205,7 +205,23 @@ fun NavGraphBuilder.writeRoute(navigateBack: () -> Unit) {
             moodName = { Mood.values()[pageNumber].name },
             onTitleChanged = { viewModel.setTitle(title = it) },
             onDescriptionChanged = { viewModel.setDescription(description = it) },
-            onDeleteConfirmed = { /*TODO*/ },
+            onDeleteConfirmed = { viewModel.deleteDiary(
+                onSuccess = {
+                    Toast.makeText(
+                        context,
+                        "Deleted",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    navigateBack()
+                },
+                onError = { message ->
+                    Toast.makeText(
+                        context,
+                        message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            ) },
             onDateTimeUpdated = { viewModel.updateDateTime(zonedDateTime = it) },
             onBackPressed = navigateBack,
             onSaveClicked = {
