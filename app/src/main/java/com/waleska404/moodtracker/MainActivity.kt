@@ -16,12 +16,14 @@ import com.waleska404.moodtracker.navigation.SetupNavGraph
 import com.waleska404.moodtracker.ui.theme.MoodTrackerTheme
 import com.waleska404.moodtracker.util.Constants.APP_ID
 import com.waleska404.moodtracker.util.retryUploadingImageToFirebase
+import dagger.hilt.android.AndroidEntryPoint
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject
