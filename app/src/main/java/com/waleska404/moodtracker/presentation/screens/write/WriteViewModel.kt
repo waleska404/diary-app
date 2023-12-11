@@ -1,5 +1,6 @@
 package com.waleska404.moodtracker.presentation.screens.write
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
@@ -8,8 +9,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.waleska404.moodtracker.data.repository.MongoDB
 import com.waleska404.moodtracker.model.Diary
+import com.waleska404.moodtracker.model.GalleryImage
 import com.waleska404.moodtracker.model.GalleryState
 import com.waleska404.moodtracker.model.Mood
 import com.waleska404.moodtracker.model.RequestState
@@ -189,7 +194,7 @@ class WriteViewModel @Inject constructor(
             }
         }
     }
-    /*
+
     fun addImage(image: Uri, imageType: String) {
         val remoteImagePath = "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
                 "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
@@ -200,7 +205,7 @@ class WriteViewModel @Inject constructor(
             )
         )
     }
-
+    /*
     private fun uploadImagesToFirebase() {
         val storage = FirebaseStorage.getInstance().reference
         galleryState.images.forEach { galleryImage ->
@@ -248,13 +253,13 @@ class WriteViewModel @Inject constructor(
                     }
             }
         }
-    }
+    }*/
 
     private fun extractImagePath(fullImageUrl: String): String {
         val chunks = fullImageUrl.split("%2F")
         val imageName = chunks[2].split("?").first()
         return "images/${Firebase.auth.currentUser?.uid}/$imageName"
-    }*/
+    }
 
 }
 

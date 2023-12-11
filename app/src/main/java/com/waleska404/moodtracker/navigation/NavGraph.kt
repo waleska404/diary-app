@@ -1,7 +1,6 @@
 package com.waleska404.moodtracker.navigation
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -26,7 +25,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
-import com.waleska404.moodtracker.model.GalleryImage
 import com.waleska404.moodtracker.model.Mood
 import com.waleska404.moodtracker.model.RequestState
 import com.waleska404.moodtracker.presentation.components.DisplayAlertDialog
@@ -108,7 +106,6 @@ fun NavGraphBuilder.authenticationRoute(
                 viewModel.setLoading(true)
             },
             onSuccessfulFirebaseSignIn = { tokenId ->
-                Log.d("MYTAG", "AUTH: $tokenId")
                 viewModel.signInWithMongoAtlas(
                     tokenId = tokenId,
                     onSuccess = {
@@ -126,7 +123,6 @@ fun NavGraphBuilder.authenticationRoute(
                 viewModel.setLoading(false)
             },
             onDialogDismissed = { message ->
-                Log.d("MYTAG", "AUTH: $message")
                 messageBarState.addError(Exception(message))
                 viewModel.setLoading(false)
             },
@@ -245,14 +241,10 @@ fun NavGraphBuilder.writeRoute(navigateBack: () -> Unit) {
                 )
             },
             onImageSelect = {
-                galleryState.addImage(
-                    GalleryImage(
-                        image = it,
-                        remoteImagePath = ""
-                    )
-                )
+                val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
+                viewModel.addImage(image = it, imageType = type)
             },
-            onImageDeleteClicked = {}
+            onImageDeleteClicked = { galleryState.removeImage(it) }
         )
     }
 }

@@ -2,7 +2,6 @@ package com.waleska404.moodtracker.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -64,7 +63,6 @@ fun HomeScreen(
                 padding = it
                 when (diaries) {
                     is RequestState.Success -> {
-                        Log.d("MYTAG", "HomeScreen: ${diaries.data}")
                         HomeContent(
                             paddingValues = it,
                             diaryNotes = diaries.data,
@@ -73,7 +71,6 @@ fun HomeScreen(
                     }
 
                     is RequestState.Error -> {
-                        Log.d("MYTAG", "HomeScreen: ${diaries.error.message}")
                         EmptyPage(
                             title = "Error",
                             subtitle = "${diaries.error.message}"
