@@ -4,7 +4,10 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storageMetadata
+import com.waleska404.moodtracker.data.database.entity.ImageToUpload
 import io.realm.kotlin.types.RealmInstant
 import java.time.Instant
 
@@ -37,7 +40,7 @@ fun fetchImagesFromFirebase(
     }
 }
 
-/*
+
 fun retryUploadingImageToFirebase(
     imageToUpload: ImageToUpload,
     onSuccess: () -> Unit
@@ -48,8 +51,9 @@ fun retryUploadingImageToFirebase(
         storageMetadata { },
         imageToUpload.sessionUri.toUri()
     ).addOnSuccessListener { onSuccess() }
-}*
+}
 
+/*
 fun retryDeletingImageFromFirebase(
     imageToDelete: ImageToDelete,
     onSuccess: () -> Unit

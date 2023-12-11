@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.waleska404.moodtracker.data.database.ImageToUploadDao
+import com.waleska404.moodtracker.data.database.entity.ImageToUpload
 import com.waleska404.moodtracker.data.repository.MongoDB
 import com.waleska404.moodtracker.model.Diary
 import com.waleska404.moodtracker.model.GalleryImage
@@ -35,7 +37,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    //private val imageToUploadDao: ImageToUploadDao,
+    private val imageToUploadDao: ImageToUploadDao,
     //private val imageToDeleteDao: ImageToDeleteDao
 ) : ViewModel() {
     val galleryState = GalleryState()
@@ -212,7 +214,6 @@ class WriteViewModel @Inject constructor(
         galleryState.images.forEach { galleryImage ->
             val imagePath = storage.child(galleryImage.remoteImagePath)
             imagePath.putFile(galleryImage.image)
-                /*
                 .addOnProgressListener {
                     val sessionUri = it.uploadSessionUri
                     if (sessionUri != null) {
@@ -226,7 +227,7 @@ class WriteViewModel @Inject constructor(
                             )
                         }
                     }
-                }*/
+                }
         }
     }
 
