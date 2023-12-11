@@ -2,6 +2,7 @@ package com.waleska404.moodtracker.presentation.components
 
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -29,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.waleska404.moodtracker.model.Diary
 import com.waleska404.moodtracker.model.Mood
 import com.waleska404.moodtracker.ui.theme.Elevation
+import com.waleska404.moodtracker.util.fetchImagesFromFirebase
 import com.waleska404.moodtracker.util.toInstant
 import io.realm.kotlin.ext.realmListOf
 import java.time.Instant
@@ -45,7 +47,7 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
     var galleryOpened by remember { mutableStateOf(false) }
     var galleryLoading by remember { mutableStateOf(false) }
     val downloadedImages = remember { mutableStateListOf<Uri>() }
-    /*
+
     LaunchedEffect(key1 = galleryOpened) {
         if (galleryOpened && downloadedImages.isEmpty()) {
             galleryLoading = true
@@ -70,7 +72,7 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
                 }
             )
         }
-    }*/
+    }
 
     Row(modifier = Modifier
         .clickable(

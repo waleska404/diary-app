@@ -1,7 +1,10 @@
 package com.waleska404.moodtracker.util
 
+import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import com.google.firebase.storage.FirebaseStorage
 import io.realm.kotlin.types.RealmInstant
 import java.time.Instant
 
@@ -9,7 +12,7 @@ import java.time.Instant
  * Download images from Firebase asynchronously.
  * This function returns imageUri after each successful download.
  * */
-/*
+
 fun fetchImagesFromFirebase(
     remoteImagePaths: List<String>,
     onImageDownload: (Uri) -> Unit,
@@ -32,7 +35,7 @@ fun fetchImagesFromFirebase(
             }
         }
     }
-}*/
+}
 
 /*
 fun retryUploadingImageToFirebase(

@@ -20,6 +20,7 @@ import com.waleska404.moodtracker.model.GalleryState
 import com.waleska404.moodtracker.model.Mood
 import com.waleska404.moodtracker.model.RequestState
 import com.waleska404.moodtracker.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
+import com.waleska404.moodtracker.util.fetchImagesFromFirebase
 import com.waleska404.moodtracker.util.toRealmInstant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.types.RealmInstant
@@ -67,7 +68,6 @@ class WriteViewModel @Inject constructor(
                             setSelectedDiary(diary = diary.data)
                             setTitle(title = diary.data.title)
                             setDescription(description = diary.data.description)
-                            /*
                             fetchImagesFromFirebase(
                                 remoteImagePaths = diary.data.images,
                                 onImageDownload = { downloadedImage ->
@@ -80,7 +80,7 @@ class WriteViewModel @Inject constructor(
                                         )
                                     )
                                 }
-                            )*/
+                            )
                         }
                     }
             }
