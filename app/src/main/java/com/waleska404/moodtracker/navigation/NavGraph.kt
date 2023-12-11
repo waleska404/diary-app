@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
+import com.waleska404.moodtracker.model.GalleryImage
 import com.waleska404.moodtracker.model.Mood
 import com.waleska404.moodtracker.model.RequestState
 import com.waleska404.moodtracker.presentation.components.DisplayAlertDialog
@@ -106,7 +107,7 @@ fun NavGraphBuilder.authenticationRoute(
                 oneTapState.open()
                 viewModel.setLoading(true)
             },
-            onTokenIdReceived = { tokenId ->
+            onSuccessfulFirebaseSignIn = { tokenId ->
                 Log.d("MYTAG", "AUTH: $tokenId")
                 viewModel.signInWithMongoAtlas(
                     tokenId = tokenId,
@@ -119,6 +120,10 @@ fun NavGraphBuilder.authenticationRoute(
                         viewModel.setLoading(false)
                     }
                 )
+            },
+            onFailedFirebaseSignIn = {
+                messageBarState.addError(Exception(it))
+                viewModel.setLoading(false)
             },
             onDialogDismissed = { message ->
                 Log.d("MYTAG", "AUTH: $message")
@@ -205,23 +210,25 @@ fun NavGraphBuilder.writeRoute(navigateBack: () -> Unit) {
             moodName = { Mood.values()[pageNumber].name },
             onTitleChanged = { viewModel.setTitle(title = it) },
             onDescriptionChanged = { viewModel.setDescription(description = it) },
-            onDeleteConfirmed = { viewModel.deleteDiary(
-                onSuccess = {
-                    Toast.makeText(
-                        context,
-                        "Deleted",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    navigateBack()
-                },
-                onError = { message ->
-                    Toast.makeText(
-                        context,
-                        message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            ) },
+            onDeleteConfirmed = {
+                viewModel.deleteDiary(
+                    onSuccess = {
+                        Toast.makeText(
+                            context,
+                            "Deleted",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navigateBack()
+                    },
+                    onError = { message ->
+                        Toast.makeText(
+                            context,
+                            message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
+            },
             onDateTimeUpdated = { viewModel.updateDateTime(zonedDateTime = it) },
             onBackPressed = navigateBack,
             onSaveClicked = {
@@ -237,7 +244,14 @@ fun NavGraphBuilder.writeRoute(navigateBack: () -> Unit) {
                     }
                 )
             },
-            onImageSelect = {},
+            onImageSelect = {
+                galleryState.addImage(
+                    GalleryImage(
+                        image = it,
+                        remoteImagePath = ""
+                    )
+                )
+            },
             onImageDeleteClicked = {}
         )
     }
