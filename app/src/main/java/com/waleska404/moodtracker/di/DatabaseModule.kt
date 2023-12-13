@@ -2,6 +2,7 @@ package com.waleska404.moodtracker.di
 
 import android.content.Context
 import androidx.room.Room
+import com.waleska404.moodtracker.connectivity.NetworkConnectivityObserver
 import com.waleska404.moodtracker.data.database.ImagesDatabase
 import com.waleska404.moodtracker.util.Constants.IMAGES_DATABASE
 import dagger.Module
@@ -34,10 +35,10 @@ object DatabaseModule {
     @Provides
     fun provideSecondDao(database: ImagesDatabase) = database.imageToDeleteDao()
 
-    /*
+
     @Singleton
     @Provides
     fun provideNetworkConnectivityObserver(
         @ApplicationContext context: Context
-    ) = NetworkConnectivityObserver(context = context)*/
+    ) = NetworkConnectivityObserver(context = context)
 }

@@ -135,6 +135,7 @@ object MongoDB : MongoRepository {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun updateDiary(diary: Diary): RequestState<Diary> {
         return if (user != null) {
             realm.write {
