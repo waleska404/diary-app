@@ -10,11 +10,13 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
+import com.waleska404.moodtracker.data.database.ImageToDeleteDao
 import com.waleska404.moodtracker.data.database.ImageToUploadDao
 import com.waleska404.moodtracker.navigation.Screen
 import com.waleska404.moodtracker.navigation.SetupNavGraph
 import com.waleska404.moodtracker.ui.theme.MoodTrackerTheme
 import com.waleska404.moodtracker.util.Constants.APP_ID
+import com.waleska404.moodtracker.util.retryDeletingImageFromFirebase
 import com.waleska404.moodtracker.util.retryUploadingImageToFirebase
 import dagger.hilt.android.AndroidEntryPoint
 import io.realm.kotlin.mongodb.App
@@ -28,6 +30,8 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var imageToUploadDao: ImageToUploadDao
+    @Inject
+    lateinit var imageToDeleteDao: ImageToDeleteDao
     private var keepSplashOpened = true
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -48,14 +52,14 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-        cleanupCheck(scope = lifecycleScope, imageToUploadDao = imageToUploadDao)
+        cleanupCheck(scope = lifecycleScope, imageToUploadDao = imageToUploadDao, imageToDeleteDao = imageToDeleteDao)
     }
 }
 
 private fun cleanupCheck(
     scope: CoroutineScope,
     imageToUploadDao: ImageToUploadDao,
-    //imageToDeleteDao: ImageToDeleteDao
+    imageToDeleteDao: ImageToDeleteDao
 ) {
     scope.launch(Dispatchers.IO) {
         val result = imageToUploadDao.getAllImages()
@@ -69,7 +73,7 @@ private fun cleanupCheck(
                 }
             )
         }
-        /*
+
         val result2 = imageToDeleteDao.getAllImages()
         result2.forEach { imageToDelete ->
             retryDeletingImageFromFirebase(
@@ -80,7 +84,7 @@ private fun cleanupCheck(
                     }
                 }
             )
-        }*/
+        }
     }
 }
 

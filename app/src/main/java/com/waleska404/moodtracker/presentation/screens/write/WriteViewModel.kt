@@ -13,7 +13,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.waleska404.moodtracker.data.database.ImageToDeleteDao
 import com.waleska404.moodtracker.data.database.ImageToUploadDao
+import com.waleska404.moodtracker.data.database.entity.ImageToDelete
 import com.waleska404.moodtracker.data.database.entity.ImageToUpload
 import com.waleska404.moodtracker.data.repository.MongoDB
 import com.waleska404.moodtracker.model.Diary
@@ -38,7 +40,7 @@ import javax.inject.Inject
 class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val imageToUploadDao: ImageToUploadDao,
-    //private val imageToDeleteDao: ImageToDeleteDao
+    private val imageToDeleteDao: ImageToDeleteDao
 ) : ViewModel() {
     val galleryState = GalleryState()
     var uiState by mutableStateOf(UiState())
@@ -164,7 +166,7 @@ class WriteViewModel @Inject constructor(
         })
         if (result is RequestState.Success) {
             uploadImagesToFirebase()
-            //deleteImagesFromFirebase()
+            deleteImagesFromFirebase()
             withContext(Dispatchers.Main) {
                 onSuccess()
             }
@@ -185,7 +187,7 @@ class WriteViewModel @Inject constructor(
                 if (result is RequestState.Success) {
                     withContext(Dispatchers.Main) {
                         uiState.selectedDiary?.let {
-                            //deleteImagesFromFirebase(images = it.images)
+                            deleteImagesFromFirebase(images = it.images)
                         }
                         onSuccess()
                     }
@@ -231,7 +233,6 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    /*
     private fun deleteImagesFromFirebase(images: List<String>? = null) {
         val storage = FirebaseStorage.getInstance().reference
         if (images != null) {
@@ -257,7 +258,7 @@ class WriteViewModel @Inject constructor(
                     }
             }
         }
-    }*/
+    }
 
     private fun extractImagePath(fullImageUrl: String): String {
         val chunks = fullImageUrl.split("%2F")
