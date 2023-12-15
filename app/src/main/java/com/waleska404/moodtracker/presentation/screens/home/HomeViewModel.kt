@@ -33,11 +33,12 @@ class HomeViewModel @Inject constructor(
     private lateinit var filteredDiariesJob: Job
 
     private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
-
     var diaries: MutableState<Diaries> = mutableStateOf(RequestState.Idle)
+    var dateIsSelected by mutableStateOf(false)
+        private set
 
     init {
-        observeAllDiaries()
+        getDiaries()
         viewModelScope.launch {
             connectivity.observe().collect {
                 network = it
@@ -45,9 +46,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getDiaries(zonedDateTime: ZonedDateTime? = null) {
+        dateIsSelected = zonedDateTime != null
+        diaries.value = RequestState.Loading
+        if (dateIsSelected && zonedDateTime != null) {
+            observeFilteredDiaries(zonedDateTime = zonedDateTime)
+        } else {
+            observeAllDiaries()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun observeAllDiaries() {
-        viewModelScope.launch {
+        allDiariesJob = viewModelScope.launch {
+            if (::filteredDiariesJob.isInitialized) {
+                filteredDiariesJob.cancelAndJoin()
+            }
             MongoDB.getAllDiaries().collect { result ->
                 diaries.value = result
             }

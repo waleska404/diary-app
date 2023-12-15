@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.waleska404.moodtracker.R
 import com.waleska404.moodtracker.data.repository.Diaries
 import com.waleska404.moodtracker.model.RequestState
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -32,7 +33,10 @@ fun HomeScreen(
     navigateToWrite: () -> Unit,
     navigateToWriteScreenWithArgs: (String) -> Unit,
     onSignOutClicked: () -> Unit,
-    onDeleteAllClicked: () -> Unit
+    onDeleteAllClicked: () -> Unit,
+    dateIsSelected: Boolean,
+    onDateSelected: (ZonedDateTime) -> Unit,
+    onDateReset: () -> Unit,
 ) {
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -46,9 +50,9 @@ fun HomeScreen(
             topBar = {
                 HomeTopBar(
                     onMenuClicked = onMenuClicked,
-                    dateIsSelected = false,
-                    onDateSelected = {},
-                    onDateReset = {},
+                    dateIsSelected = dateIsSelected,
+                    onDateSelected = onDateSelected,
+                    onDateReset = onDateReset,
                     scrollBehavior = scrollBehavior,
                 )
             },

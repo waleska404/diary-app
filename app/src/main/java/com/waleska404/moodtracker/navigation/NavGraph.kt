@@ -160,6 +160,9 @@ fun NavGraphBuilder.homeRoute(
             onMenuClicked = {
                 scope.launch { drawerState.open() }
             },
+            dateIsSelected = viewModel.dateIsSelected,
+            onDateSelected = { viewModel.getDiaries(zonedDateTime = it) },
+            onDateReset = { viewModel.getDiaries() },
             onSignOutClicked = { signOutDialogOpened = true },
             navigateToWrite = navigateToWriteScreen,
             navigateToWriteScreenWithArgs = navigateToWriteScreenWithArgs,
