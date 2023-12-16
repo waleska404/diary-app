@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MoodTracker"
 include(":app")
- 
+include(":core:ui")
