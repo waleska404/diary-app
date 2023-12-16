@@ -2,9 +2,9 @@ package com.waleska404.moodtracker.di
 
 import android.content.Context
 import androidx.room.Room
-import com.waleska404.moodtracker.connectivity.NetworkConnectivityObserver
-import com.waleska404.moodtracker.data.database.ImagesDatabase
-import com.waleska404.moodtracker.util.Constants.IMAGES_DATABASE
+import com.waleska404.mongo.database.ImagesDatabase
+import com.waleska404.util.Constants.IMAGES_DATABASE
+import com.waleska404.util.connectivity.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

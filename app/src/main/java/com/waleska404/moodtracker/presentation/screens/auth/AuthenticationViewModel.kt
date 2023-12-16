@@ -3,7 +3,7 @@ package com.waleska404.moodtracker.presentation.screens.auth
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.waleska404.moodtracker.util.Constants.APP_ID
+import com.waleska404.util.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers

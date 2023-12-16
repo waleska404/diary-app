@@ -16,8 +16,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.waleska404.moodtracker.model.Diary
-import com.waleska404.moodtracker.presentation.components.DiaryHolder
+import com.waleska404.util.model.Diary
+import com.waleska404.util.DiaryHolder
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)

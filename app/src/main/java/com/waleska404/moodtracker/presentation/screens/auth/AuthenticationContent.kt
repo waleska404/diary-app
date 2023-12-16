@@ -11,7 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.waleska404.moodtracker.R
-import com.waleska404.moodtracker.presentation.components.GoogleButton
+import com.waleska404.ui.components.GoogleButton
 
 @Composable
 fun AuthenticationContent(

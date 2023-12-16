@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.waleska404.moodtracker.model.Diary
-import com.waleska404.moodtracker.model.GalleryImage
-import com.waleska404.moodtracker.model.GalleryState
-import com.waleska404.moodtracker.model.Mood
+import com.waleska404.util.model.Diary
+import com.waleska404.ui.GalleryImage
+import com.waleska404.ui.GalleryState
+import com.waleska404.util.model.Mood
 import java.time.ZonedDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)

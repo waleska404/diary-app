@@ -21,9 +21,9 @@ import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
-import com.waleska404.moodtracker.model.Diary
-import com.waleska404.moodtracker.presentation.components.DisplayAlertDialog
-import com.waleska404.moodtracker.util.toInstant
+import com.waleska404.util.model.Diary
+import com.waleska404.ui.components.DisplayAlertDialog
+import com.waleska404.util.toInstant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId

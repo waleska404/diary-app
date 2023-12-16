@@ -15,7 +15,7 @@ import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.onetap.OneTapSignInState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
-import com.waleska404.moodtracker.util.Constants.CLIENT_ID
+import com.waleska404.util.Constants.CLIENT_ID
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

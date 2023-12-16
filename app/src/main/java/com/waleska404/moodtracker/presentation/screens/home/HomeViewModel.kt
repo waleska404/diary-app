@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.waleska404.moodtracker.connectivity.ConnectivityObserver
-import com.waleska404.moodtracker.connectivity.NetworkConnectivityObserver
-import com.waleska404.moodtracker.data.database.ImageToDeleteDao
+import com.waleska404.mongo.database.ImageToDeleteDao
+import com.waleska404.mongo.repository.Diaries
+import com.waleska404.mongo.repository.MongoDB
+import com.waleska404.util.connectivity.ConnectivityObserver
+import com.waleska404.util.connectivity.NetworkConnectivityObserver
 import com.waleska404.moodtracker.data.database.entity.ImageToDelete
-import com.waleska404.moodtracker.data.repository.Diaries
-import com.waleska404.moodtracker.data.repository.MongoDB
 import com.waleska404.moodtracker.model.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
