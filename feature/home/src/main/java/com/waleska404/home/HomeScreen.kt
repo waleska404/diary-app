@@ -1,7 +1,8 @@
-package com.waleska404.moodtracker.presentation.screens.home
+package com.waleska404.home
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -18,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.waleska404.mongo.repository.Diaries
-import com.waleska404.moodtracker.R
 import com.waleska404.moodtracker.model.RequestState
 import java.time.ZonedDateTime
 
@@ -38,6 +38,7 @@ fun HomeScreen(
     onDateSelected: (ZonedDateTime) -> Unit,
     onDateReset: () -> Unit,
 ) {
+    Log.d("MYTAG", "inside home SCREEN")
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     NavigationDrawer(
@@ -117,14 +118,14 @@ fun NavigationDrawer(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(250.dp),
-                        painter = painterResource(id = R.drawable.logo),
+                        painter = painterResource(id = com.waleska404.ui.R.drawable.logo),
                         contentDescription = "Logo Image"
                     )
                     NavigationDrawerItem(
                         label = {
                             Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.google_logo),
+                                    painter = painterResource(id = com.waleska404.ui.R.drawable.google_logo),
                                     contentDescription = "Google Logo",
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))

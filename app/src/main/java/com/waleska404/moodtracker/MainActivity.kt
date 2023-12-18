@@ -2,6 +2,7 @@ package com.waleska404.moodtracker
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -40,16 +41,24 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("MYTAG", "before init splash screen")
         installSplashScreen().setKeepOnScreenCondition { keepSplashOpened }
+        Log.d("MYTAG", "after init splash screen")
         FirebaseApp.initializeApp(this)
+        Log.d("MYTAG", "after init firebase")
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        Log.d("MYTAG", "window")
         setContent {
+            Log.d("MYTAG", "set content")
             MoodTrackerTheme {
+                Log.d("MYTAG", "theme")
                 val navController = rememberNavController()
+                Log.d("MYTAG", "nav controller")
                 SetupNavGraph(
                     startDestination = getStartDestination(),
                     navController = navController,
                     onDataLoaded = {
+                        Log.d("MYTAG", "onDataLoaded")
                         keepSplashOpened = false
                     }
                 )

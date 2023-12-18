@@ -1,27 +1,18 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
-    id("dagger.hilt.android.plugin")
     id("io.realm.kotlin")
-    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.waleska404.moodtracker"
+    namespace = "com.waleska404.auth"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.waleska404.moodtracker"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -73,44 +64,11 @@ dependencies {
     // Compose Navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
-    // Firebase
-    implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
-    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
-
-    // Room components
-    implementation("androidx.room:room-runtime:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-
     // Runtime Compose
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
-    // Splash API
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
-    // Mongo DB Realm
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("io.realm.kotlin:library-sync:1.11.0")
-
-    // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    ksp("com.google.dagger:hilt-compiler:2.48")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-
-    // Coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
-
-    // Pager - Accompanist [DEPRECATED]
-//    implementation "com.google.accompanist:accompanist-pager:0.27.0"
-
-    // Date-Time Picker
-    implementation("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
-
-    // CALENDAR
-    implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
-
-    // CLOCK
-    implementation("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
+    implementation(project(":core:util"))
+    implementation(project(":core:ui"))
 
     // Message Bar Compose
     implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
@@ -118,12 +76,12 @@ dependencies {
     // One-Tap Compose
     implementation("com.github.stevdza-san:OneTapCompose:1.0.7")
 
-    // Desugar JDK
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    // Firebase
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
 
-    implementation(project(":core:ui"))
-    implementation(project(":core:util"))
-    implementation(project(":data:mongo"))
-    implementation(project(":feature:auth"))
-    implementation(project(":feature:home"))
+    // Mongo DB Realm
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("io.realm.kotlin:library-sync:1.11.0")
+
+
 }

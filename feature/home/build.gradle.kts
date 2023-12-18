@@ -1,27 +1,20 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("io.realm.kotlin")
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
-    id("io.realm.kotlin")
-    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.waleska404.moodtracker"
-    compileSdk = 34
+    namespace = "com.waleska404.home"
+    compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.waleska404.moodtracker"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -31,11 +24,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
@@ -51,6 +44,13 @@ android {
 }
 
 dependencies {
+
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -73,20 +73,22 @@ dependencies {
     // Compose Navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
-    // Firebase
-    implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
-    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
-
-    // Room components
-    implementation("androidx.room:room-runtime:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-
     // Runtime Compose
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
-    // Splash API
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(project(":core:util"))
+    implementation(project(":core:ui"))
+    implementation(project(":data:mongo"))
+
+    // Message Bar Compose
+    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
+
+    // One-Tap Compose
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.7")
+
+    // Firebase
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
     // Mongo DB Realm
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
@@ -97,12 +99,6 @@ dependencies {
     ksp("com.google.dagger:hilt-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
-    // Coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
-
-    // Pager - Accompanist [DEPRECATED]
-//    implementation "com.google.accompanist:accompanist-pager:0.27.0"
-
     // Date-Time Picker
     implementation("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
 
@@ -111,19 +107,4 @@ dependencies {
 
     // CLOCK
     implementation("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
-
-    // Message Bar Compose
-    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
-
-    // One-Tap Compose
-    implementation("com.github.stevdza-san:OneTapCompose:1.0.7")
-
-    // Desugar JDK
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-
-    implementation(project(":core:ui"))
-    implementation(project(":core:util"))
-    implementation(project(":data:mongo"))
-    implementation(project(":feature:auth"))
-    implementation(project(":feature:home"))
 }

@@ -1,6 +1,7 @@
 package com.waleska404.moodtracker.navigation
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -17,32 +18,27 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.stevdzasan.messagebar.rememberMessageBarState
-import com.stevdzasan.onetap.rememberOneTapSignInState
-import com.waleska404.util.model.Mood
+import com.waleska404.auth.navigation.authenticationRoute
+import com.waleska404.home.HomeScreen
+import com.waleska404.home.HomeViewModel
 import com.waleska404.moodtracker.model.RequestState
-import com.waleska404.ui.components.DisplayAlertDialog
-import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationScreen
-import com.waleska404.moodtracker.presentation.screens.auth.AuthenticationViewModel
-import com.waleska404.moodtracker.presentation.screens.home.HomeScreen
-import com.waleska404.moodtracker.presentation.screens.home.HomeViewModel
+import com.waleska404.util.model.Mood
 import com.waleska404.moodtracker.presentation.screens.write.WriteScreen
 import com.waleska404.moodtracker.presentation.screens.write.WriteViewModel
-import com.waleska404.util.Constants.APP_ID
+import com.waleska404.ui.components.DisplayAlertDialog
+import com.waleska404.util.Constants
 import com.waleska404.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.waleska404.util.Screen
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -51,6 +47,7 @@ fun SetupNavGraph(
     navController: NavHostController,
     onDataLoaded: () -> Unit,
 ) {
+    Log.d("MYTAG", "inside navgraph, $startDestination")
     NavHost(
         startDestination = startDestination,
         navController = navController
@@ -83,56 +80,6 @@ fun SetupNavGraph(
     }
 }
 
-fun NavGraphBuilder.authenticationRoute(
-    navigateToHomeScreen: () -> Unit,
-    onDataLoaded: () -> Unit,
-) {
-    composable(route = Screen.Authentication.route) {
-        val viewModel: AuthenticationViewModel = viewModel()
-        val loadingState by viewModel.loadingState
-        val authenticated by viewModel.authenticated
-        val oneTapState = rememberOneTapSignInState()
-        val messageBarState = rememberMessageBarState()
-
-        LaunchedEffect(key1 = Unit) {
-            onDataLoaded()
-        }
-
-        AuthenticationScreen(
-            authenticated = authenticated,
-            loadingState = loadingState,
-            oneTapState = oneTapState,
-            messageBarState = messageBarState,
-            onButtonClicked = {
-                oneTapState.open()
-                viewModel.setLoading(true)
-            },
-            onSuccessfulFirebaseSignIn = { tokenId ->
-                viewModel.signInWithMongoAtlas(
-                    tokenId = tokenId,
-                    onSuccess = {
-                        messageBarState.addSuccess("Authentication successful!")
-                        viewModel.setLoading(false)
-                    },
-                    onError = {
-                        messageBarState.addError(Exception(it))
-                        viewModel.setLoading(false)
-                    }
-                )
-            },
-            onFailedFirebaseSignIn = {
-                messageBarState.addError(Exception(it))
-                viewModel.setLoading(false)
-            },
-            onDialogDismissed = { message ->
-                messageBarState.addError(Exception(message))
-                viewModel.setLoading(false)
-            },
-            navigateToHomeScreen = navigateToHomeScreen
-        )
-    }
-}
-
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.homeRoute(
     navigateToWriteScreen: () -> Unit,
@@ -140,23 +87,26 @@ fun NavGraphBuilder.homeRoute(
     navigateToAuthScreen: () -> Unit,
     onDataLoaded: () -> Unit,
 ) {
+    Log.d("MYTAG", "inside home route")
     composable(route = Screen.Home.route) {
         val viewModel: HomeViewModel = hiltViewModel()
-        val diaries by viewModel.diaries
+        val diaries = viewModel.diaries
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
         var signOutDialogOpened by remember { mutableStateOf(false) }
         var deleteAllDialogOpened by remember { mutableStateOf(false) }
+        Log.d("MYTAG", "inside home route composable")
 
         LaunchedEffect(key1 = diaries) {
-            if (diaries !is RequestState.Loading) {
+            Log.d("MYTAG", "inside launched effect")
+            if (diaries.value !is RequestState.Loading) {
                 onDataLoaded()
             }
         }
 
         HomeScreen(
-            diaries = diaries,
+            diaries = diaries.value,
             drawerState = drawerState,
             onMenuClicked = {
                 scope.launch { drawerState.open() }
@@ -178,7 +128,7 @@ fun NavGraphBuilder.homeRoute(
             onDialogClosed = { signOutDialogOpened = false },
             onYesClicked = {
                 scope.launch(Dispatchers.IO) {
-                    val user = App.create(APP_ID).currentUser
+                    val user = App.create(Constants.APP_ID).currentUser
                     if (user != null) {
                         user.logOut()
                         withContext(Dispatchers.Main) {

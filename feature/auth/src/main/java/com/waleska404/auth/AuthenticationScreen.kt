@@ -1,4 +1,4 @@
-package com.waleska404.moodtracker.presentation.screens.auth
+package com.waleska404.auth
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background

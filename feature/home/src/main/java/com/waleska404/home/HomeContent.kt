@@ -1,4 +1,4 @@
-package com.waleska404.moodtracker.presentation.screens.home
+package com.waleska404.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi

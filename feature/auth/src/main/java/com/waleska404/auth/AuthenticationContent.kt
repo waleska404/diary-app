@@ -1,4 +1,4 @@
-package com.waleska404.moodtracker.presentation.screens.auth
+package com.waleska404.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.waleska404.moodtracker.R
 import com.waleska404.ui.components.GoogleButton
 
 @Composable
@@ -37,7 +36,7 @@ fun AuthenticationContent(
             ) {
                 Image(
                     modifier = Modifier.size(120.dp),
-                    painter = painterResource(id = R.drawable.google_logo),
+                    painter = painterResource(id = com.waleska404.ui.R.drawable.google_logo),
                     contentDescription = "Google Logo"
                 )
                 Spacer(modifier = Modifier.height(20.dp))
